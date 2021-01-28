@@ -1,0 +1,7 @@
+#!/bin/bash
+WINDOW_ID=$(bspc query -N -n)
+
+FILE=$(echo $1 | awk -F':' '{print $1}')
+LINE=$(echo $1 | awk -F':' '{print $2}')
+
+vim --servername "$WINDOW_ID" --remote-tab +"$LINE" "$FILE"

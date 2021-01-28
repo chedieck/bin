@@ -1,0 +1,4 @@
+#!/bin/bash
+
+WINDOW_ID=$(bspc query -N -n)
+vim --servername $WINDOW_ID
