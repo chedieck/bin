@@ -1,0 +1,142 @@
+#!/bin/bash
+
+last=${@:$#}
+
+
+{
+    # read arguments to set options
+    exact_prefix=""
+    exact_suffix=""
+    general_suffix=""
+    general_prefix=""
+    ignore=""
+    exact_pattern=""
+    verbose=""
+    ignore_index=""
+    context="0"
+
+    generic_search="true"
+    while [ -n "$1" ]; do 
+        case "$1" in
+            -i|--ignore-case)
+                ignore="i"
+                ;;
+            -C|--context)
+                context="$2"
+                shift
+                ;;
+            -a|--assignment)
+                exact_prefix="^ *"
+                exact_suffix=" +="
+
+                general_prefix="^ *.*"
+                general_suffix=".*="
+                generic_search=""
+                ;;
+            -p|--parameter)
+                exact_prefix="\\(.*, *"
+                exact_suffix="=.*\\)"
+
+                general_prefix="\\(.*"
+                general_suffix=".*=.*\\)"
+
+                generic_search=""
+                ;;
+            -d|--def)
+                exact_prefix="^ *def +"
+                exact_suffix=" *\\("
+
+                general_prefix="^ *def +.*"
+                general_suffix=".*\\("
+
+                generic_search=""
+                ;;
+            -c|--class)
+                exact_prefix="^ *class +"
+                exact_suffix=" *\\("
+
+                general_prefix="^ *class +.*"
+
+                generic_search=""
+                ;;
+            -v|--verbose)
+                verbose="true"
+                ;;
+            -n|--no-index)
+                ignore_index="--no-index"
+                ;;
+            -m|--module)
+                exact_prefix="12347flkasj1923847234dlskfjakjfdlkasj1823"
+
+                general_prefix="(^import .*|^from .*)"
+                generic_search=""
+                ;;
+            *)
+                ;;
+        esac
+        shift
+
+    done
+
+
+    # create patterns
+    exact_pattern="$exact_prefix""$last""$exact_suffix"
+    pattern="$general_prefix""$last""$general_suffix"
+
+    # show patterns if verbose
+    if [ -n "$verbose" ]
+    then
+        echo pattern: "$pattern"
+        echo exact_pattern: "$exact_pattern"
+    fi
+
+    # run git grep
+    git_look() {
+        matches=$(git grep -I"$ignore"rn -E -C "${context}" $ignore_index "$1")
+        echo "$matches"
+    }
+    exact_matches="$(git_look "$exact_pattern")"
+    matches="$(git_look "$pattern")"
+
+    # make for iterate over lines, not WORDS
+    IFS=$'\n'
+
+    # escape character
+    esc=$(printf '\033')
+
+    # colors
+    title_color="${esc}[1;34m"   # blue
+    exact_title_color="${esc}[1;32m"   # yellow
+    path_color="${esc}[4;37m"       # white
+    context_color="${esc}[0;32m"        # green
+    match_color="${esc}[1;37m"      # white
+    color_off="${esc}[0m"       # text reset
+
+    # show all matches first
+    if [ -n "$matches" ]
+    then
+        echo -e "$title_color""All matches:""$color_off"
+        for match in $matches
+        do
+            echo -e "$path_color""$match" | sed "s/: */""$color_off""\n    ""$context_color""/2" | sed "s/""\(${last}\)""/""$match_color""\1""$context_color""/g""$ignore"
+        done
+    else
+        echo "No matches found."
+    fi
+
+    # then show exact matches
+    if [ -n "$exact_matches" ] && [ ! -n "$generic_search" ]
+    then
+        echo
+        echo
+
+        echo -e "$exact_title_color""Exact matches:""$color_off"
+        for match in $exact_matches
+        do
+            echo -e "$path_color""$match" | sed "s/:/""$color_off""\n    ""$context_color""/2" | sed "s/""${last}""/""$match_color""${last}""$context_color""/g"
+        done
+    else
+        true
+    fi
+
+} | vim -R +AnsiEsc -
