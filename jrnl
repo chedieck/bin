@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DAY=$(date +%d)
+MONTH=$(date +%m)
+YEAR=$(date +%y)
+
+key="$1"
+JOURNAL_DIR="/home/ttv1/documents/journal"
+
+case $key in
+    -r|--read)
+        (cd "$JOURNAL_DIR" && for file in *; do echo "$file" ; echo ----- ; echo ; cat "$JOURNAL_DIR"/"$file" ; echo ; done| vim -R -c 'set ft=markdown' -)
+        ;;
+    *)
+        (cd "$JOURNAL_DIR" && vim "$YEAR"-"$MONTH"-"$DAY".md -S .script.vim)
+        ;;
+esac
