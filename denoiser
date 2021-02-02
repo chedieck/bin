@@ -1,0 +1,45 @@
+#!/bin/bash
+# usage:
+#denoiser -i rawaudio.mp3 -sn startnoise -d duration -o output.wav -a 0.32
+play=0
+while [ -n "$1" ]; do 
+    echo $1 kkkkkk
+    case "$1" in
+        -i|--input)
+            input="$2"
+            shift
+            ;;
+        -sn|--start-noise)
+            startnoise="$2"
+            shift
+            ;;
+        -d|--duration)
+            duration="$2"
+            shift
+            ;;
+        -o|--output)
+            output="$2"
+            shift
+            ;;
+        -a|--amount)
+            amount="$2"
+            shift
+            ;;
+        -p|--play)
+            play=1
+            shift
+            ;;
+    esac
+    shift
+
+done
+
+ffmpeg -i "$input" -ss "$startnoise" -t "$duration" _noise_tmp.wav
+sox _noise_tmp.wav -n noiseprof _noise_profile_tmp
+sox "$input" "$output" noisered _noise_profile_tmp "$amount"
+rm _noise_profile_tmp _noise_tmp.wav
+
+if [ -n "$play" ]; then
+    mpv "$output"
+fi
+
