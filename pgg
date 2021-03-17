@@ -133,7 +133,7 @@ last=${@:$#}
         echo -e "$exact_title_color""Exact matches:""$color_off"
         for match in $exact_matches
         do
-            echo -e "$path_color""$match" | sed "s/:/""$color_off""\n    ""$context_color""/2" | sed "s/""${last}""/""$match_color""${last}""$context_color""/g"
+            echo -e "$path_color""$match" | sed "s/: */""$color_off""\n    ""$context_color""/2" | sed "s/""\(${last}\)""/""$match_color""\1""$context_color""/g""$ignore"
         done
     else
         true
