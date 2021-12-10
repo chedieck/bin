@@ -1,0 +1,8 @@
+#!/bin/bash
+temp=""
+until [ $temp -e 3 ]
+do
+    telnet 0.0.0.0 6900;
+    clear;
+    sleep 0.5;
+done

@@ -1,0 +1,85 @@
+#!/bin/sh
+# APIC docker utils
+
+web_container_name="apicbase-web-1"
+db_container_name="apicbasecom_db_3"
+base_command_web="docker exec -w /usr/src/app/apicbase -it $web_container_name"
+base_command_web_django="docker exec -w /usr/src/app/apicbase -it $web_container_name python manage.py"
+base_command_db="docker exec -it $db_container_name"
+command="$1"
+
+shift
+case "$command" in
+    "help" | "h" | "-h" | "--help")
+        echo Avaiable commands:
+        echo "  shortcut, command           [container_name]    command description"
+        echo " --- "
+        echo "  sp, shell_plus              [$web_container_name]    run \`python manage.py shell_plus\`"
+        echo "  mig, migrate [ARGS]         [$web_container_name]    run \`python manage.py migrate [ARGS]\`"
+        echo "  mm, makemigrations [ARGS]   [$web_container_name]    run \`python manage.py makemigrations [ARGS]\`"
+        echo "  sm, showmigrations [ARGS]   [$web_container_name]    run \`python manage.py showmigrations [ARGS]\`"
+        echo "  em, empty_migration [ARGS]  [$web_container_name]    run \`python manage.py makemigrations --empty [ARGS]\`"
+        echo "  rs, runscript [ARGS]        [$web_container_name]    run \`python manage.py runscript [ARGS]\`"
+        echo "  pi, poetry_install          [$web_container_name]    run \`poetry install\`"
+        echo "  b, bash                     [$web_container_name]    enter the bash command line"
+        echo "  db, database                [$db_container_name]  enter the psql command-line"
+        echo "  [ARGS]                      [$web_container_name]    run \`python manage.py [ARGS]\`"
+        ;;
+    "reset_db")
+        echo "are you REALLY SURE of that?[y/N]"
+        read bool
+        if [[ $bool =~ ^[yY]$ ]]
+        then
+            echo "One more time...[y/N]"
+            read bool
+            if [[ $bool =~ ^[yY]$ ]]
+            then
+                echo "WIP"
+                # reset db
+                exit
+            fi
+        fi
+        ;;
+    "database" | "db")
+        eval "$base_command_db" psql apic_storage -U apicbase
+        ;;
+    "shell_plus" | "sp")
+        eval "$base_command_web_django" shell_plus
+        ;;
+    "migrate" | "mig")
+        eval "$base_command_web_django" migrate "$@"
+        ;;
+    "makemigrations" | "mmig" | "mm")
+        eval "$base_command_web_django" makemigrations "$@"
+        ;;
+    "showmigrations" | "sm")
+        eval "$base_command_web_django" showmigrations "$@"
+        ;;
+    "poetry_install" | "pi")
+        eval "$base_command_web" poetry install
+        ;;
+    "empty_migration" | "em")
+        if [ -z "$1" ]
+        then
+            echo "No application name supplied"
+            exit
+        fi
+
+        eval "$base_command_web_django" makemigrations --empty "$@"
+        ;;
+    "bash" | "b")
+        eval "$base_command_web" bash -l
+        ;;
+    "runscript" | "rs")
+        eval "$base_command_web_django" runscript "$@"
+        ;;
+    "makemessages" | "mme")
+        eval "$base_command_web_django" makemessages "$@"
+        ;;
+    "compilemessages" | "cm")
+        eval "$base_command_web_django" compilemessages "$@"
+        ;;
+    *)
+        eval "$base_command_web" "$command" "$@"
+        ;;
+esac

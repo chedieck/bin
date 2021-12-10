@@ -1,7 +1,23 @@
 #!/bin/bash
 WINDOW_ID=$(bspc query -N -n)
 
-FILE=$(echo $1 | awk -F':' '{print $1}')
-LINE=$(echo $1 | awk -F':' '{print $2}')
+case "$1" in
+    f|-f)
+        path=$(find . -name "$2" | head -n 1)
+        shift
+        ;;
+    *)
+        path=$(echo "$1" | awk -F':' '{print $1}')
+        ;;
+esac
 
-vim --servername "$WINDOW_ID" --remote-tab +"$LINE" "$FILE"
+line=$(echo "$1" | awk -F':' '{print $2}')
+
+echo "$path" "$line"
+
+if [ -f "$path" ]; then
+    path="$path"
+elif [ -f ${path#a*/} ]; then
+    path="${path#a*/}"
+fi
+vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path"

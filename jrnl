@@ -5,7 +5,7 @@ MONTH=$(date +%m)
 YEAR=$(date +%y)
 
 key="$1"
-JOURNAL_DIR="/home/ttv1/documents/journal"
+JOURNAL_DIR="/home/$USER/documents/journal"
 
 case $key in
     -r|--read)

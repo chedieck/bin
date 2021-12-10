@@ -4,7 +4,7 @@ ARG_PATH="$1"
 
 if [[ "$ARG_PATH" == apic ]]
 then
-    kitty --session ~/.config/kitty/apicbase.session
+    kitty --session ~/.config/kitty/apicbase.session &
     exit
 fi
 
@@ -12,4 +12,4 @@ fi
 echo "$ARG_PATH"
 sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
 
-kitty --session ~/.config/kitty/temp.session
+kitty --session ~/.config/kitty/temp.session &
