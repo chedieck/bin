@@ -1,7 +1,7 @@
 #!/bin/sh
 # APIC docker utils
 
-web_container_name="apicbase-web-1"
+web_container_name="apicbasecom-web-1"
 db_container_name="apicbasecom_db_3"
 base_command_web="docker exec -w /usr/src/app/apicbase -it $web_container_name"
 base_command_web_django="docker exec -w /usr/src/app/apicbase -it $web_container_name python manage.py"
@@ -20,6 +20,7 @@ case "$command" in
         echo "  sm, showmigrations [ARGS]   [$web_container_name]    run \`python manage.py showmigrations [ARGS]\`"
         echo "  em, empty_migration [ARGS]  [$web_container_name]    run \`python manage.py makemigrations --empty [ARGS]\`"
         echo "  rs, runscript [ARGS]        [$web_container_name]    run \`python manage.py runscript [ARGS]\`"
+        echo "  t, test [ARGS]              [$web_container_name]    run \`python manage.py test [ARGS]\`"
         echo "  pi, poetry_install          [$web_container_name]    run \`poetry install\`"
         echo "  b, bash                     [$web_container_name]    enter the bash command line"
         echo "  db, database                [$db_container_name]  enter the psql command-line"
@@ -72,6 +73,9 @@ case "$command" in
         ;;
     "runscript" | "rs")
         eval "$base_command_web_django" runscript "$@"
+        ;;
+    "test" | "t")
+        eval "$base_command_web_django" test "$@"
         ;;
     "makemessages" | "mme")
         eval "$base_command_web_django" makemessages "$@"
