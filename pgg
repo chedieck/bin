@@ -127,6 +127,12 @@ last=${@:$#}
     # then show exact matches
     if [ -n "$exact_matches" ] && [ ! -n "$generic_search" ]
     then
+        if [ "$(echo "$exact_matches" | wc -l)" -eq 1 ]
+        then
+            echo
+            echo -en "$exact_title_color""Opened on server: ""$path_color"
+            tv "$exact_matches"
+        fi
         echo
         echo
 
@@ -138,5 +144,4 @@ last=${@:$#}
     else
         true
     fi
-
 } | vim -R +AnsiEsc -
