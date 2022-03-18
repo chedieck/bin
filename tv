@@ -3,7 +3,7 @@ WINDOW_ID=$(bspc query -N -n)
 
 case "$1" in
     f|-f)
-        path=$(find . -name "$2" | head -n 1)
+        path=$(find . -name "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
         shift
         ;;
     *)
