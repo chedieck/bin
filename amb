@@ -8,6 +8,12 @@ then
     exit
 fi
 
+if [[ "$ARG_PATH" == pb ]]
+then
+    kitty --session ~/.config/kitty/paybutton.session &
+    exit
+fi
+
 
 echo "$ARG_PATH"
 sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
