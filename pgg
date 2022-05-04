@@ -3,7 +3,8 @@
 last=${@:$#}
 
 
-{
+open_vim=1
+to_write=$({
     # read arguments to set options
     exact_prefix=""
     exact_suffix=""
@@ -105,7 +106,7 @@ last=${@:$#}
     esc=$(printf '\033')
 
     # colors
-    title_color="${esc}[1;34m"   # blue
+    title_color="${esc}[4;34m"   # blue
     exact_title_color="${esc}[1;32m"   # yellow
     path_color="${esc}[4;37m"       # white
     context_color="${esc}[0;32m"        # green
@@ -125,12 +126,12 @@ last=${@:$#}
     fi
 
     # then show exact matches
-    if [ -n "$exact_matches" ] && [ ! -n "$generic_search" ]
+    if [ -n "$exact_matches" ] && [ -z "$generic_search" ]
     then
         if [ "$(echo "$exact_matches" | wc -l)" -eq 1 ]
         then
             echo
-            echo -en "$exact_title_color""Opened on server: ""$path_color"
+            echo -en "$exact_title_color""$path_color"
             tv "$exact_matches"
         fi
         echo
@@ -144,4 +145,6 @@ last=${@:$#}
     else
         true
     fi
-} | vim -R +AnsiEsc -
+})
+[ -z "$open_vim" ] || echo "$to_write" | vim -R +ColorToggle -
+# } | vim -R +AnsiEsc -
