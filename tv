@@ -6,6 +6,10 @@ case "$1" in
         path=$(find . -name "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
         shift
         ;;
+    wf|-wf)
+        path=$(find . -wholename "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
+        shift
+        ;;
     *)
         path=$(echo "$1" | awk -F':' '{print $1}')
         ;;
@@ -13,11 +17,8 @@ esac
 
 line=$(echo "$1" | awk -F':' '{print $2}')
 
-echo "$path" "$line"
-
-if [ -f "$path" ]; then
-    path="$path"
-elif [ -f ${path#a*/} ]; then
+if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path"
+[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path" && echo OPENED IN VSS: "$path" "$line"
+
