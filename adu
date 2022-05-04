@@ -47,7 +47,7 @@ case "$command" in
         fi
         ;;
     "database" | "db")
-        eval "$base_command_db" psql apic_storage -U apicbase
+        eval "$base_command_db" psql apic_storage -U pgsql_user
         ;;
     "shell_plus" | "sp")
         eval "$base_command_web_django" shell_plus
