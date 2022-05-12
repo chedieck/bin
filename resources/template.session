@@ -1,0 +1,19 @@
+new_tab VF
+cd ARG_PATH
+launch bash -c "vifmrun; bash -login"
+focus
+
+new_tab LG
+cd ARG_PATH
+launch bash -c "lazygit; bash -login"
+
+new_tab SVIM
+cd ARG_PATH
+launch bash -c "vss; bash -login"
+
+new_tab BASH
+cd ARG_PATH
+launch bash -login
+
+new_tab EXTRA
+cd ARG_PATH
