@@ -1,0 +1,12 @@
+[Unit]
+Description=Remind daemon.
+
+[Service]
+User=ttv1
+Environment=PULSE_RUNTIME_PATH="/run/user/1000/pulse/"
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/ttv1/.Xauthority
+ExecStart=/home/ttv1/codes/bin/resources/remind-daemon
+
+[Install]
+WantedBy=multi-user.target

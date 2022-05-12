@@ -1,0 +1,9 @@
+#!/bin/bash
+current_vol=$(pactl -- get-sink-volume 0 | awk -F/ '{print $2}' | tr '\n' ' ' | sed 's/ \+//g' | sed 's/%//')
+pactl -- set-sink-volume 0 40%
+(
+mpv "$HOME"/codes/bin/resources/alarm-bell.wav
+) &
+xmessage "$@"
+wait
+pactl -- set-sink-volume 0 "$current_vol"%
