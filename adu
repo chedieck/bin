@@ -1,11 +1,9 @@
 #!/bin/sh
-# APIC docker utils
+# AMB docker utils
 
-web_container_name="apicbasecom_web"
-node_container_name="apicbasecom_node"
-db_container_name="apicbasecom_db"
-base_command_web="docker exec -w /usr/src/app/apicbase -it $web_container_name"
-base_command_web_django="docker exec -w /usr/src/app/apicbase -it $web_container_name python manage.py"
+node_container_name="paybutton-server-paybutton-1"
+db_container_name="paybutton-server-db-1"
+base_command_node="docker exec  -it $node_container_name"
 base_command_db="docker exec -it $db_container_name"
 command="$1"
 
@@ -15,86 +13,44 @@ case "$command" in
         echo Avaiable commands:
         echo "  shortcut, command           [container_name]    command description"
         echo " --- "
-        echo "  sp, shell_plus              [$web_container_name]    run \`python manage.py shell_plus\`"
-        echo "  mig, migrate [ARGS]         [$web_container_name]    run \`python manage.py migrate [ARGS]\`"
-        echo "  mm, makemigrations [ARGS]   [$web_container_name]    run \`python manage.py makemigrations [ARGS]\`"
-        echo "  sm, showmigrations [ARGS]   [$web_container_name]    run \`python manage.py showmigrations [ARGS]\`"
-        echo "  em, empty_migration [ARGS]  [$web_container_name]    run \`python manage.py makemigrations --empty [ARGS]\`"
-        echo "  rs, runscript [ARGS]        [$web_container_name]    run \`python manage.py runscript [ARGS]\`"
-        echo "  r, run [ARGS]               [$web_container_name]    run \`python manage.py shell_plus < [ARGS]\`"
-        echo "  t, test [ARGS]              [$web_container_name]    run \`python manage.py test [ARGS]\`"
-        echo "  mme, makemessages [ARGS]    [$web_container_name]    run \`python manage.py makemessages [ARGS]\`"
-        echo "  cm, compilemessages [ARGS]  [$web_container_name]    run \`python manage.py compilemessages [ARGS]\`"
-        echo "  pi, poetry_install          [$web_container_name]    run \`poetry install\`"
-        echo "  b, bash                     [$web_container_name]    enter the web container"
-        echo "  db, database                [$db_container_name]     enter the psql command-line"
+        echo "  db, database                [$db_container_name]     enter the mariadb command-line"
         echo "  n, node                     [$node_container_name]   enter the node container"
-        echo "  [ARGS]                      [$web_container_name]    run \`python manage.py [ARGS]\`"
-        ;;
-    "reset_db")
-        echo "are you REALLY SURE of that?[y/N]"
-        read bool
-        if [[ $bool =~ ^[yY]$ ]]
-        then
-            echo "One more time...[y/N]"
-            read bool
-            if [[ $bool =~ ^[yY]$ ]]
-            then
-                echo "WIP"
-                # reset db
-                exit
-            fi
-        fi
+        echo "  genmigration, gm            [$node_container_name]   create migration file with name ARGS"
+        echo "  migrate, mig                [$node_container_name]   run migrations"
+        echo "  migrateto, mt               [$node_container_name]   run migrations until ARGS"
+        echo "  showmigrations, sm          [$node_container_name]   show migrations"
+        echo "  undolast, ul                [$node_container_name]   undo last migration"
+        echo "  undoto, ut                  [$node_container_name]   undo to migration ARGS"
+        echo "  undoall, ua                 [$node_container_name]   undo all migrations"
         ;;
     "database" | "db")
-        eval "$base_command_db" psql apic_storage -U pgsql_user
-        ;;
-    "shell_plus" | "sp")
-        eval "$base_command_web_django" shell_plus
-        ;;
-    "migrate" | "mig")
-        eval "$base_command_web_django" migrate "$@"
-        ;;
-    "makemigrations" | "mmig" | "mm")
-        eval "$base_command_web_django" makemigrations "$@"
-        ;;
-    "showmigrations" | "sm")
-        eval "$base_command_web_django" showmigrations "$@"
-        ;;
-    "poetry_install" | "pi")
-        eval "$base_command_web" poetry install
-        ;;
-    "empty_migration" | "em")
-        if [ -z "$1" ]
-        then
-            echo "No application name supplied"
-            exit
-        fi
-
-        eval "$base_command_web_django" makemigrations --empty "$@"
-        ;;
-    "bash" | "b")
-        eval "$base_command_web" bash -l
-        ;;
-    "runscript" | "rs")
-        eval "$base_command_web_django" runscript "$@"
-        ;;
-    "run" | "r")
-        eval docker exec -w /usr/src/app/apicbase -i $web_container_name sh -c 'python manage.py shell_plus < "$@"'
-        ;;
-    "test" | "t")
-        eval "$base_command_web_django" test "$@"
-        ;;
-    "makemessages" | "mme")
-        eval "$base_command_web_django" makemessages "$@"
-        ;;
-    "compilemessages" | "cm")
-        eval "$base_command_web_django" compilemessages "$@"
+        eval "$base_command_db" mariadb -u paybutton -ppaybutton "$@"
         ;;
     "node" | "n")
-        docker exec -it "$node_container_name" bash -l
+        eval "$base_command_node" ash -l
+        ;;
+    "genmigration" | "gm")
+        eval "$base_command_node" sequelize-cli migration:generate --name "$@"
+        ;;
+    "migrate" | "mig")
+        eval "$base_command_node" sequelize-cli db:migrate
+        ;;
+    "migrateto" | "mt")
+        eval "$base_command_node" sequelize-cli db:migrate --to "$@"
+        ;;
+    "showmigrations" | "sm")
+        eval "$base_command_node" sequelize-cli db:migrate:status
+        ;;
+    "undolast" | "ul")
+        eval "$base_command_node" sequelize-cli db:migrate:undo
+        ;;
+    "undoto" | "ut")
+        eval "$base_command_node" sequelize-cli db:migrate:undo:all --to "$@"
+        ;;
+    "undoall" | "ua")
+        eval "$base_command_node" sequelize-cli db:migrate:undo:all
         ;;
     *)
-        eval "$base_command_web" "$command" "$@"
+        eval "$node_container_name" "$command" "$@"
         ;;
 esac
