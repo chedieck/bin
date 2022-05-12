@@ -3,7 +3,11 @@
 case "$1" in
     tv)
         xrandr --output DP-1 --primary --mode 2560x1440 --pos 2560x0 --rotate normal --output HDMI-1 --mode 2560x1440 --pos 0x461 --rotate normal --output HDMI-2 --off
+        "$HOME"/codes/bin/setbg
+        echo 'Xft.dpi:   192' | xrdb
         ;;
     *)
         xrandr --output DP-1 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x461 --rotate normal --output HDMI-2 --off
+        "$HOME"/codes/bin/setbg
+        echo 'Xft.dpi:   96' | xrdb
 esac
