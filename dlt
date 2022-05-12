@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# DownLoad and Tune
+# Examples:
+# $ dlt -i https://www.youtube.com/watch?v=0JSDUNNZCTo -o niejnost -p 4
+# will create an equal video with pitch 4 semi-tones above 
+# usage: ./download_and_tune.sh -i https://www.youtube.com/watch?v=0JSDUNNZCTo -o niejnost -p -3
+# will create an equal video with pitch 3 semi-tones below
+
+while (( $# )); do
+    case "$1" in
+        -p)
+            pitch="$2"
+            side="plus"
+            [[ $pitch == -* ]] && side="minus"
+            shift 2
+            ;;
+        -i)
+            link="$2"
+            shift 2
+            ;;
+        -o)
+            outfile="$2"
+            shift 2
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+echo "Downloading audio & video from youtube..."
+youtube-dl -f 251 "$link" -o "$outfile"_audio.webm || sh -c 'echo Error; exit'
+youtube-dl -f 248 "$link" -o  "$outfile"_video.webm || sh -c 'echo Error; exit'
+
+echo "Transposing pitch..."
+ffmpeg -i "$outfile"_audio.webm "$outfile"_audio.wav
+rubberband -p "$pitch" "$outfile"_audio.wav temp.wav
+
+echo "Creating final video..."
+ffmpeg -i "$outfile"_video.webm  -i temp.wav -map 0:v -map 1:a -c:v copy -shortest "$outfile"-"$side"-4.mp4
+
+echo "Cleaning up."
+rm "$outfile"_audio.wav "$outfile"_video.webm "$outfile"_audio.webm temp.wav
