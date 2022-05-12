@@ -1,34 +1,39 @@
-sudo xinit -- /usr/bin/X :1 vt8 -config /etc/X11/xorg.conf.nvidia &
+#!/bin/bash
+log_path="$HOME"/.cache/mining/mine.log
+[[ "$1" -eq "-w" || "$1" -eq "--watch" ]] && watch --color -n 0.2 tail "$log_path"
+if [[ -z "$1" ]]
+then
+    sudo xinit -- /usr/bin/X :1 vt8 -config /etc/X11/xorg.conf.nvidia &
 
-# RTX 3070
-sudo nvidia-smi -i 0 -pm 1
-sudo nvidia-smi -i 0 -pl 130
+    # RTX 3070
+    sudo nvidia-smi -i 0 -pm 1
+    sudo nvidia-smi -i 0 -pl 130
 
-nvidia-settings -c :1 -a [gpu:0]/GPUMemoryTransferRateOffset[4]=1900
-nvidia-settings -c :1 -a [gpu:0]/GPUGraphicsClockOffset[4]=-400
+    nvidia-settings -c :1 -a [gpu:0]/GPUMemoryTransferRateOffset[4]=1900
+    nvidia-settings -c :1 -a [gpu:0]/GPUGraphicsClockOffset[4]=-400
 
 
-nvidia-settings -c :1 -a "[gpu:0]/GPUFanControlState=1"
-nvidia-settings -c :1 -a "[fan:0]/GPUTargetFanSpeed=80"
-nvidia-settings -c :1 -a "[fan:1]/GPUTargetFanSpeed=80"
+    nvidia-settings -c :1 -a "[gpu:0]/GPUFanControlState=1"
+    nvidia-settings -c :1 -a "[fan:0]/GPUTargetFanSpeed=80"
+    nvidia-settings -c :1 -a "[fan:1]/GPUTargetFanSpeed=80"
 
-# RTX 2060 SUPER
-# sudo nvidia-smi -i 1 -pm 1
-# sudo nvidia-smi -i 1 -pl 130
+    # RTX 2060 SUPER
+    # sudo nvidia-smi -i 1 -pm 1
+    # sudo nvidia-smi -i 1 -pl 130
 
-# nvidia-settings -c :1 -a [gpu:1]/GPUMemoryTransferRateOffset[4]=1800
-# nvidia-settings -c :1 -a [gpu:1]/GPUGraphicsClockOffset[4]=-400
+    # nvidia-settings -c :1 -a [gpu:1]/GPUMemoryTransferRateOffset[4]=1800
+    # nvidia-settings -c :1 -a [gpu:1]/GPUGraphicsClockOffset[4]=-400
 
-# nvidia-settings -c :1 -a "[gpu:1]/GPUFanControlState=1"
-# nvidia-settings -c :1 -a "[fan:2]/GPUTargetFanSpeed=80"
-# nvidia-settings -c :1 -a "[fan:3]/GPUTargetFanSpeed=80"
+    # nvidia-settings -c :1 -a "[gpu:1]/GPUFanControlState=1"
+    # nvidia-settings -c :1 -a "[fan:2]/GPUTargetFanSpeed=80"
+    # nvidia-settings -c :1 -a "[fan:3]/GPUTargetFanSpeed=80"
 
-log_dir=$HOME/.config/mining/mine.log
 
-[[ -d $HOME/.config/mining/error-logs ]] || mkdir -p $HOME/.config/mining/error-logs
-while true; do
-    nsfminer -P stratum1+tcp://xeteva.1@eth.cruxpool.com:15555 | tee $log_dir
-    sleep 1
-    now=$(date +"%Y-%d-%m.%r" | xargs)
-    cp $log_dir/mine.log /home/ttv1/.mining/error-logs/"$now".log
+    [[ -d "$HOME"/.cache/mining/error-logs ]] || mkdir -p "$HOME"/.cache/mining/error-logs
+    while true; do
+        nsfminer -P stratum1+tcp://xeteva.1@eth.cruxpool.com:15555 | tee "$log_path"
+        sleep 1
+        now=$(date +"%Y-%d-%m.%r" | xargs)
+        cp "$log_path" /home/ttv1/.mining/error-logs/"$now".log
 done
+fi
