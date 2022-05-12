@@ -10,15 +10,27 @@ case "$1" in
         path=$(find . -wholename "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
         shift
         ;;
+    igg|-igg)
+        path_line=$(git grep -irn "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
+        path=$(echo "$path_line" | awk -F':' '{print $1}')
+        line=$(echo "$path_line" | awk -F':' '{print $2}')
+        shift
+        ;;
+    gg|-gg)
+        path_line=$(git grep -rn "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
+        path=$(echo "$path_line" | awk -F':' '{print $1}')
+        line=$(echo "$path_line" | awk -F':' '{print $2}')
+        shift
+        ;;
     *)
         path=$(echo "$1" | awk -F':' '{print $1}')
         ;;
 esac
 
-line=$(echo "$1" | awk -F':' '{print $2}')
+[ -z "$line" ] && line=$(echo "$1" | awk -F':' '{print $2}')
 
 if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path" && echo OPENED IN VSS: "$path" "$line"
+[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path" && echo OPENED IN VSS: "$path":"$line"
 
