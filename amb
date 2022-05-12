@@ -1,13 +1,6 @@
 #!/bin/bash
 
 ARG_PATH="$1"
-
-if [[ "$ARG_PATH" == apic ]]
-then
-    kitty --session ~/.config/kitty/apicbase.session &
-    exit
-fi
-
 if [[ "$ARG_PATH" == pb ]]
 then
     kitty --session ~/.config/kitty/paybutton.session &
