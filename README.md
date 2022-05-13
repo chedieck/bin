@@ -11,7 +11,7 @@ Some of them depends on other packages, configurations, etc; that I haven't orga
 - dlt
   +  Download a song from Youtube and change the pitch. Useful for Karaoke.
 - jrnl
-  +  Journaling. Simple and pratical.
+  +  Journaling. Simple and pratical, just add the `resources/.jrnl.vim` to the journaling folder.
 - mine
   +  Script to start mining. I keep this in my `.bash_profile`, to execute it automatically on `tty2`:
   ```
