@@ -24,7 +24,7 @@ case "$command" in
         echo "  undoall, ua                 [$node_container_name]   undo all migrations"
         ;;
     "database" | "db")
-        eval "$base_command_db" mariadb -u paybutton -ppaybutton "$@"
+        eval "$base_command_db" mariadb -u paybutton -ppaybutton -D paybutton "$@"
         ;;
     "node" | "n")
         eval "$base_command_node" ash -l
