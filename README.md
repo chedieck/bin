@@ -1,11 +1,11 @@
 # Custom scripts
 Some scripts I've made, some really long ago (the ugly ones, I hope) and some more recently.
-Many of them depends on other packages, configurations, etc; that I haven't organized here.
+Some of them depends on other packages, configurations, etc; that I haven't organized here.
 
 - adu
   +  Shortcuts to enter docker containers & execute a command.
 - amb
-  +  Basically my IDE. The `template.session` is in the `resources/` folder.
+  +  Basically my IDE launcher. The `template.session` is in the `resources/` folder.
 - denoiser
   +  Clean up an audio file.
 - dlt
@@ -23,6 +23,8 @@ Many of them depends on other packages, configurations, etc; that I haven't orga
       esac
       fi
       ```
+- hey
+  + Play bell and show message. Used with `remind.service`, that can be found on `resources/` together with `remind-daemon`.
 - pgg
   +  Python git grep. Many improvements could be made to this one, but it works surprinsingly well.
 - pudbtry
