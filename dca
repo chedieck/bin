@@ -1,0 +1,97 @@
+#!/bin/sh
+# docker container aliases
+
+node_container_name="paybutton-server-paybutton-1"
+db_container_name="paybutton-server-db-1"
+base_command_node="docker exec  -it $node_container_name"
+base_command_node_root="docker exec  -it -u 0 $node_container_name"
+base_command_db="docker exec -it $db_container_name"
+command="$1"
+
+shift
+case "$command" in
+    "help" | "h" | "-h" | "--help")
+        echo Avaiable commands:
+        echo "  shortcut, command           [container_name]    command description"
+        echo " --- "
+        echo "  db, database                [$db_container_name]     enter the mariadb command-line using the main db"
+        echo "  dbr, databaseroot           [$db_container_name]     enter the mariadb command-line as root"
+        echo "  dbs, databaseshell          [$db_container_name]     enter the shell of the mariadb container"
+        echo "  dbt, databasetest           [$db_container_name]     enter the mariadb command-line using the test db"
+        echo "  t, test                     [$node_container_name]   run tests"
+        echo "  tw, testwatch               [$node_container_name]   run tests watching it"
+        echo "  tc, testcoverage            [$node_container_name]   test coverate"
+        echo "  n, node                     [$node_container_name]   enter the node container"
+        echo "  nr, noderoot                [$node_container_name]   enter the node container as root"
+        echo "  y, yarn                     [$node_container_name]   run `yarn` on the node container"
+        echo "  ya, yarnadd                 [$node_container_name]   run `yarn add ARGS` on the node container"
+        echo "  yad, yarnadddev             [$node_container_name]   run `yarn add -D ARGS` on the node container"
+        echo "  genmigration, gm            [$node_container_name]   create migration file with name ARGS"
+        echo "  migrate, mig                [$node_container_name]   run migrations"
+        echo "  migrateto, mt               [$node_container_name]   run migrations until ARGS"
+        echo "  showmigrations, sm          [$node_container_name]   show migrations"
+        echo "  undolast, ul                [$node_container_name]   undo last migration"
+        echo "  undoto, ut                  [$node_container_name]   undo to migration ARGS"
+        echo "  undoall, ua                 [$node_container_name]   undo all migrations"
+        ;;
+    "database" | "db")
+        eval "$base_command_db" mariadb -u paybutton -ppaybutton -D paybutton "$@"
+        ;;
+    "databaseroot" | "dbr")
+        eval "$base_command_db" mariadb -u root -proot "$@"
+        ;;
+    "databaseshell" | "dbs")
+        eval "$base_command_db" bash -l "$@"
+        ;;
+    "databasetest" | "dbt")
+        eval "$base_command_db" mariadb -u paybutton-test -ppaybutton-test -D paybutton-test "$@"
+        ;;
+    "test" | "t")
+        eval "$base_command_node" yarn test "$@"
+        ;;
+    "testwatch" | "tw")
+        eval "$base_command_node" yarn test --watch "$@"
+        ;;
+    "testcoverage" | "tc")
+        eval "$base_command_node" yarn test --coverage --verbose  "$@"
+        ;;
+    "node" | "n")
+        eval "$base_command_node" ash -l
+        ;;
+    "noderoot" | "nr")
+        eval "$base_command_node_root" ash -l
+        ;;
+    "yarn" | "y")
+        eval "$base_command_node_root" yarn "$@"
+        ;;
+    "yarndd" | "ya")
+        eval "$base_command_node_root" yarn add "$@"
+        ;;
+    "yarnadddev" | "yad")
+        eval "$base_command_node_root" yarn add -D "$@"
+        ;;
+    "genmigration" | "gm")
+        eval "$base_command_node" sequelize-cli migration:generate --name "$@"
+        ;;
+    "migrate" | "mig")
+        eval "$base_command_node" sequelize-cli db:migrate
+        ;;
+    "migrateto" | "mt")
+        eval "$base_command_node" sequelize-cli db:migrate --to "$@"
+        ;;
+    "showmigrations" | "sm")
+        eval "$base_command_node" sequelize-cli db:migrate:status
+        ;;
+    "undolast" | "ul")
+        eval "$base_command_node" sequelize-cli db:migrate:undo
+        ;;
+    "undoto" | "ut")
+        eval "$base_command_node" sequelize-cli db:migrate:undo:all --to "$@"
+        ;;
+    "undoall" | "ua")
+        eval "$base_command_node" sequelize-cli db:migrate:undo:all
+        ;;
+    *)
+        eval "$node_container_name" "$command" "$@"
+        ;;
+esac

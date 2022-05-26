@@ -2,10 +2,10 @@
 Some scripts I've made, some really long ago (the ugly ones, I hope) and some more recently.
 Some of them depends on other packages, configurations, etc; that I haven't organized here.
 
-- adu
-  +  Shortcuts to enter docker containers & execute a command.
 - amb
   +  Basically my IDE launcher. The `template.session` is in the `resources/` folder.
+- dca
+  +  Shortcuts to enter docker containers & execute a command.
 - denoiser
   +  Clean up an audio file.
 - dlt
