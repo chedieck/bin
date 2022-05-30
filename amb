@@ -1,14 +1,19 @@
 #!/bin/bash
 
 ARG_PATH="$1"
-if [[ "$ARG_PATH" == pb ]]
-then
+case "$ARG_PATH" in
+    pb)
     kitty --session ~/.config/kitty/paybutton.session &
-    exit
-fi
+    ;;
+    site)
+    kitty --session ~/.config/kitty/site.session &
+    ;;
+    *)
+        sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
+        kitty --session ~/.config/kitty/temp.session &
+        wait
+        rm ~/.config/kitty/temp.session
+esac
 
 
-echo "$ARG_PATH"
-sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
 
-kitty --session ~/.config/kitty/temp.session &
