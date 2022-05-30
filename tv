@@ -32,5 +32,5 @@ esac
 if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote-tab +"$line" "$path" && echo OPENED IN VSS: "$path":"$line"
+[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote +"$line" "$path" && echo OPENED IN VSS: "$path":"$line"
 
