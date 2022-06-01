@@ -63,16 +63,16 @@ case "$command" in
         eval "$base_command_node_root" ash -l
         ;;
     "yarn" | "y")
-        eval "$base_command_node_root" yarn "$@"
+        eval "$base_command_node" yarn "$@"
         ;;
     "yarnadd" | "ya")
-        eval "$base_command_node_root" yarn add "$@"
+        eval "$base_command_node" yarn add "$@"
         ;;
     "yarnadddev" | "yad")
-        eval "$base_command_node_root" yarn add -D "$@"
+        eval "$base_command_node" yarn add -D "$@"
         ;;
     "yarnremove" | "yr")
-        eval "$base_command_node_root" yarn remove "$@"
+        eval "$base_command_node" yarn remove "$@"
         ;;
     "genmigration" | "gm")
         eval "$base_command_node" sequelize-cli migration:generate --name "$@"
