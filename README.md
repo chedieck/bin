@@ -22,11 +22,11 @@ Some of them depends on other packages, configurations, etc; that I haven't orga
       * )  exec mine;;
       esac
       fi
-      ```
+  ```
 - hey
   + Play bell and show message. Used with `remind.service`, that can be found on `resources/` together with `remind-daemon`.
 - pgg
-  +  Python git grep. Many improvements could be made to this one, but it works surprinsingly well.
+  +  Python git grep. Many improvements could be made to this one, I don't use it anymore.
 - pudbtry
   +  Remote debugging with `pudb`. 
 - setbg
@@ -36,6 +36,6 @@ Some of them depends on other packages, configurations, etc; that I haven't orga
 - swapkbr
   +  Toggle between russian & portuguese keyboard layouts.
 - tv
-  +  Python git grep. Many improvements could be made to this one, but it works surprinsingly well.
+  +  Search for a file and send it to the vim server created by `vss`.
 - vss
-  +  Python git grep. Many improvements could be made to this one, but it works surprinsingly well.
+  +  Create a vim server with the node id, works only with BSPWM
