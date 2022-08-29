@@ -1,0 +1,2 @@
+#!/bin/bash
+echo 📼 "$(nvidia-smi | grep -A 1 'NVIDIA GeForce' | tail -n 1 | awk '{printf $3}')"
