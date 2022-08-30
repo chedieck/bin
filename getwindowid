@@ -1,0 +1,1 @@
+xprop -root _NET_ACTIVE_WINDOW | grep -o "0x.*"

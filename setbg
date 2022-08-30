@@ -1,1 +1,2 @@
-feh --bg-fill ~/images/wpps/onda-quebrando.jpg --bg-fill ~/images/wpps/steep-mountains.jpg
+#!/bin/bash
+feh --bg-fill /home/ttv1/images/wpps/aves/arara-canindé_1661812366890.jpg --bg-fill /home/ttv1/images/wpps/casa-fundo-montanha.jpg

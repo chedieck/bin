@@ -1,5 +1,5 @@
 #!/bin/sh
-# docker container aliases
+# docker container exec shortcuts
 
 node_container_name="paybutton-dev"
 db_container_name="paybutton-db"

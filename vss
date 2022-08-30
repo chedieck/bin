@@ -1,4 +1,4 @@
 #!/bin/bash
 
-window_id=$(bspc query -N -n)
+window_id=$(getwindowid)
 vim --servername "$window_id" "$@"
