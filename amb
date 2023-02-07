@@ -8,6 +8,10 @@ case "$ARG_PATH" in
     site)
     kitty --session ~/.config/kitty/site.session &
     ;;
+    -n|--new)
+        mkdir "$HOME"/codes/"$2"
+        amb "$HOME"/codes/"$2"
+    ;;
     *)
         sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
         kitty --session ~/.config/kitty/temp.session &
