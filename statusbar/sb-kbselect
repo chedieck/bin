@@ -4,7 +4,7 @@
 kb="$(setxkbmap -query | grep -oP 'layout:\s*\K\w+')" || exit 1
 
 case $BUTTON in
-	1) kb_choice="$(awk '/! layout/{flag=1; next} /! variant/{flag=0} flag {print $2, "- " $1}' /usr/share/X11/xkb/rules/base.lst | dmenu -l 15)"
+	1) kb_choice="$(awk '/! layout/{flag=1; next} /! variant/{flag=0} flag {print $2, "- " $1}' /usr/share/X11/xkb/rules/base.lst | dmenu -l 15 -c)"
 	kb="$(echo "$kb_choice" | awk '{print $3}')"
 	setxkbmap "$kb"
 	pkill -RTMIN+30 "${STATUSBAR:-dwmblocks}";;
@@ -13,4 +13,7 @@ case $BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-echo ⌨"$kb"
+flag=""
+[ "$kb" = "br" ] && flag="br"
+[ "$kb" = "ru" ] && flag="ru"
+echo ⌨"$flag"

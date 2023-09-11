@@ -1,0 +1,22 @@
+#!/bin/bash
+shopt -s expand_aliases
+source /home/ttv1/.bash_aliases
+
+case "$BUTTON" in
+    1) if [ "$(birdbg tog)" == "Saved favorite." ];
+    then
+        notify-send -i wikiaves -u low "$(birdbg name)" "⭐ Saved favorite."
+    else
+        notify-send -i wikiaves -u low "$(birdbg name)" "🗑️Removed favorite."
+    fi
+        dev&> /dev/null;;
+    2) notify-send -i wikiaves -u low "Fetching a new bird picture..."
+        birdbg run &> /dev/null
+        birdbg mp3 &> /dev/null
+        pkill -RTMIN+3 dwmblocks
+        ;;
+    3) birdbg info &> /dev/null;;
+        #notify-send -i wikiaves -u low "Favorites:" "$(birdbg show)";;
+    4|5) birdbg ls | dmenu -l 9 -c | xargs -r birdbg sel ;;
+esac
+echo 🐧

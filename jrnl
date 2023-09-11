@@ -9,9 +9,9 @@ JOURNAL_DIR="/home/$USER/documents/journal"
 
 case $key in
     -r|--read)
-        (cd "$JOURNAL_DIR" && for file in *; do echo "$file" ; echo ----- ; echo ; cat "$JOURNAL_DIR"/"$file" ; echo ; done| vim -R -c 'set ft=markdown' -)
+        (cd "$JOURNAL_DIR" && for file in *; do echo "$file" ; echo ----- ; echo ; cat "$JOURNAL_DIR"/"$file" ; echo ; done| $EDITOR -R -c 'set ft=markdown' -)
         ;;
     *)
-        (cd "$JOURNAL_DIR" && vim "$YEAR"-"$MONTH"-"$DAY".md -S .jrnl.vim)
+        (cd "$JOURNAL_DIR" && $EDITOR "$YEAR"-"$MONTH"-"$DAY".md -S .jrnl.vim)
         ;;
 esac

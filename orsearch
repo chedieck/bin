@@ -1,0 +1,29 @@
+#!/bin/bash
+request () {
+    curl -s "https://api.openrussian.org/suggestions?q=$1&dummy=1654996242200&lang=en" -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0' -H 'Accept: application/json, text/plain, */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Origin: https://en.openrussian.org' -H 'Connection: keep-alive' -H 'Referer: https://en.openrussian.org/' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-site'
+}
+
+
+
+case $1 in
+    "-f" | "--first-word")
+        shift
+        ;;
+    "-r" | "--remove-stress")  # WIP
+        shift
+        ;;
+    "-h" | "--help")
+        echo Avaiable flags:
+        echo "  shortcut, full name      description"
+        echo " --- "
+        echo "  -f, --first-word       Show the first word returned by OR search"
+        echo "  -r, --remove-stress    Removes the stress ' marker"
+esac
+
+search_term=$(echo "$@" | sed 's/ /+/')
+full_info=$(request "$search_term")
+
+first_word_params='.result.words[0].ru'
+first_formOf_params='.result.formOf[0].source.ru'
+
+echo "$full_info" | jq -j "if $first_formOf_params then $first_formOf_params else $first_word_params end"

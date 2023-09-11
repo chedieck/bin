@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ls /dev/video0 2> /dev/null && echo hey || exit
+mkdir "$HOME"/codes/sentinel/data/"$(date '+%d-%m-%Y')"
+ffmpeg -f video4linux2 -s 640x360 -i /dev/video0 -ss 0:0:3 -frames:v 1 "$HOME"/codes/sentinel/data/"$(date '+%d-%m-%Y')"/"$(date '+%H:%M:%S')".jpg

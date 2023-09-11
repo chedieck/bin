@@ -1,0 +1,45 @@
+#!/bin/sh
+
+#case $BUTTON in
+	#1) notify-send "🖥 CPU hogs" "$(ps axch -o cmd:15,%cpu --sort=-%cpu | head)\\n(100% per core)" ;;
+	#2) setsid -f "$TERMINAL" -e htop ;;
+	#3) notify-send "🖥 CPU module " "\- Shows CPU temperature.
+#- Click to show intensive processes.
+#- Middle click to open htop." ;;
+	#6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+#esac
+#
+
+get_ipwhois () {
+    #printf "wait.."
+    ip_data=$(curl --connect-timeout 2 ipwho.is)
+    if [ -z "$ip_data" ]; then
+        ip="off."
+        flag="XX"
+    else
+        ip=$(echo "$ip_data" | jq -r '.ip' | cut -c 1-4)
+        #country_name=$(echo "$ip_data" | jq -r '.country')
+        #flag=$(grep 'flag: '"$country_name" ~/.local/share/emojis | cut -c 1-10)
+        flag=$(echo "$ip_data" | jq -r '.country_code')
+    fi
+    #printf "\r🌐%s""$ip"
+    printf "🌐%s%s""$flag""$ip"
+}
+
+get_ipinfoio () {
+#printf "wait.."
+ip_data=$(curl --connect-timeout 2 ipinfo.io)
+if [ -z "$ip_data" ]; then
+	ip="off."
+	flag="XX"
+else
+	ip=$(echo "$ip_data" | jq -r '.ip' | cut -c 1-4)
+	#country_name=$(echo "$ip_data" | jq -r '.country')
+	#flag=$(grep 'flag: '"$country_name" ~/.local/share/emojis | cut -c 1-10)
+	flag=$(echo "$ip_data" | jq -r '.country')
+fi
+#printf "\r🌐%s""$ip"
+printf "🌐%s%s""$flag""$ip"
+}
+
+get_ipwhois

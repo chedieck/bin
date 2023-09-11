@@ -5,10 +5,15 @@ case "$1" in
     tv)
         setmonitors
         "$HOME"/codes/bin/setbg
-        echo 'Xft.dpi:   192' | xrdb
+        #echo 'Xft.dpi:   192' | xrdb
+        ;;
+    outroff)
+        setmonitors mo
+        "$HOME"/codes/bin/setbg
+        #echo 'Xft.dpi:   96' | xrdb
         ;;
     *)
         setmonitors
         "$HOME"/codes/bin/setbg
-        echo 'Xft.dpi:   96' | xrdb
+        #echo 'Xft.dpi:   96' | xrdb
 esac

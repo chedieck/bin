@@ -1,0 +1,41 @@
+#!/bin/bash
+
+alarm_path="$HOME/codes/bin/resources/alarm-bell.wav"
+
+start_vol=0
+end_vol=$(pactl -- get-sink-volume 0 | awk -F/ '{print $2}' | tr '\n' ' ' | sed 's/ \+//g' | sed 's/%//')
+duration=5
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -f)
+            end_vol=100
+            shift
+            ;;
+        -sv)
+            start_vol="$2"
+            shift
+            shift
+            ;;
+        -d)
+            duration="$2"
+            shift
+            shift
+            ;;
+    esac
+done
+
+
+if [ "$end_vol" -eq "0" ]; then
+    exit
+fi
+
+sleep_interval=$(bc <<< "scale=$duration; 2 / $end_vol")
+# PULSE_RUNTIME_PATH="/run/user/1000/pulse/"
+
+pactl -- set-sink-volume 0 0%
+XDG_RUNTIME_DIR=/run/user/1000 paplay "$alarm_path" &
+while [ "$start_vol" -lt "$end_vol" ]; do
+    pactl -- set-sink-volume 0 +1%
+    ((start_vol++))
+    sleep "$sleep_interval"
+done

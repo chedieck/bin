@@ -1,0 +1,13 @@
+#!/bin/bash
+
+inv=0
+case $1 in 
+    -i|--invert)
+        inv=1
+        shift;
+esac
+
+symbol=$1
+amount=$2
+
+[[ $inv -eq 0  ]] && curl -s https://api.binance.com/api/v3/avgPrice?symbol="$symbol"  | jq "(.price | tonumber) * $amount" || curl -s https://api.binance.com/api/v3/avgPrice?symbol="$symbol"  | jq "$amount / (.price | tonumber)"

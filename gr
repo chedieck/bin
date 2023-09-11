@@ -1,0 +1,5 @@
+#!/bin/bash
+# usage: gr searchStrin 's/searchStringToReplace/newString/g'
+for file in $(git grep -rln "$1"); do
+    sed -i "$2" $file
+done

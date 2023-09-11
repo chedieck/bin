@@ -1,0 +1,19 @@
+#!/bin/bash
+
+out_file="$HOME/images/screenshots/$(date +%F_%T).png"
+while [[ -n "$1" ]]; do
+    case $1 in
+        "--clipboard" | "-c")
+            is_exec="--exec"
+            exec_args="'xclip -selection c -t image/png < \$f'"
+            out_file=~/images/screenshots/clipboard.png
+            shift
+            ;;
+        "--crop" | "-C")
+            crop_args="--select --freeze"
+            shift
+            ;;
+    esac
+done
+echo scrot $is_exec $exec_args $clip_args -o "$out_file"
+scrot $is_exec $exec_args $clip_args -o $out_file

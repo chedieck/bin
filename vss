@@ -1,4 +1,4 @@
 #!/bin/bash
 
 window_id=$(getwindowid)
-vim --servername "$window_id" "$@"
+nvim --listen /tmp/"$window_id" "$@"

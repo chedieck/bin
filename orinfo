@@ -1,0 +1,2 @@
+#!/bin/bash
+python "$HOME"/codes/scrapers/or-scraper/main.py "$@"

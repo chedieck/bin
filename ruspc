@@ -1,0 +1,9 @@
+shopt -s nullglob
+
+suffix=$(echo "$1" | awk -Fv= '{print $2}')
+#[ -d "$HOME"/videos/ruspc/"$suffix" ] && mkdir "$HOME"/videos/ruspc/"$suffix"
+files=( "$HOME"/videos/ruspc/"$suffix"/* )
+echo "${files[@]/#/-]}"
+[[ "${files}" = *.mp4* ]] && echo foi || echo nem foi
+#[ -if "$HOME"/videos/ruspc/"$suffix" ] && yt-dlp --write-sub --sub-langs ru,en --restrict-filenames -f 22 -P "$HOME"/videos/ruspc/"$suffix" $1
+#mpv --sid=2 --secondary-sid=1 "$HOME"/videos/ruspc/"$suffix"/*.mp4

@@ -1,0 +1,2 @@
+#!/bin/bash
+sh -c '/home/ttv1/.config/vifm/scripts/vifmrun'

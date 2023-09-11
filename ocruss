@@ -1,0 +1,4 @@
+rm /tmp/ocrruss*
+scrot -q 100 --select --line mode=edge /tmp/ocrruss.png
+tesseract /tmp/ocrruss.png /tmp/ocrruss -l rus
+gvim /tmp/ocrruss.txt

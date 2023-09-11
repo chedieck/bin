@@ -1,0 +1,1 @@
+while true; do mpv "$HOME"/codes/bin/resources/alarm-bell.wav; sleep 0.5; done

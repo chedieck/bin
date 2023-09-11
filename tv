@@ -20,8 +20,31 @@ case "$1" in
         path=$(fzf)
         shift
         ;;
+    agg|-agg)
+        # n_path_lines=$(git grep -rn -m 1 "$(echo "$2" | awk -F':' '{print $1}')" | wc -l)
+        n_path_lines=$(git grep -rn -m 1 "$2" | wc -l)
+        for ((i=1; i<= "$n_path_lines"; i++)); do
+            echo hmm "$i" "$2"
+            tv ngge "$i" "$2"
+        done
+        shift
+        ;;
     gg|-gg)
-        path_line=$(git grep -rn "$(echo "$2" | awk -F':' '{print $1}')" | head -n 1)
+        path_line=$(git grep -rn "$2" | head -n 1)
+        path=$(echo "$path_line" | awk -F':' '{print $1}')
+        line=$(echo "$path_line" | awk -F':' '{print $2}')
+        shift
+        ;;
+    ngge|-ngge)
+        [ -z "$3" ] && exit
+        path_line=$(git grep -rn -m 1 "$3" | head -n "$2" | tail -n 1)
+        path=$(echo "$path_line" | awk -F':' '{print $1}')
+        line=$(echo "$path_line" | awk -F':' '{print $2}')
+        shift
+        ;;
+    ngg|-ngg)
+        [ -z "$3" ] && exit
+        path_line=$(git grep -rn "$(echo "$3" | awk -F':' '{print $1}')" | head -n "$2" | tail -n 1)
         path=$(echo "$path_line" | awk -F':' '{print $1}')
         line=$(echo "$path_line" | awk -F':' '{print $2}')
         shift
@@ -36,5 +59,5 @@ esac
 if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-[ -f "$path" ] && vim --servername "$WINDOW_ID" --remote +"$line" "$path" && echo OPENED IN VSS: "$path":"$line"
+[ -f "$path" ] && nvr --remote +"$line" ./"$path" --servername /tmp/"$WINDOW_ID" && echo OPENED IN VSS: "$path":"$line"
 

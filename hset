@@ -1,0 +1,9 @@
+#!/bin/bash
+case $1 in
+    -c)
+        rfkill unblock bluetooth && echo -e 'power on\n' | bluetoothctl; sleep 1; echo -e 'connect 5C:C6:E9:1D:5C:98\n' | bluetoothctl
+        ;;
+    -d)
+        echo -e 'disconnect 5C:C6:E9:1D:5C:98\n' | bluetoothctl; sleep 3; echo -e 'power off\n' | bluetoothctl
+        ;;
+esac

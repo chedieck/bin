@@ -2,8 +2,17 @@
 
 ARG_PATH="$1"
 case "$ARG_PATH" in
+    borafechar|bf)
+    kitty --session ~/.config/kitty/borafechar.session &
+    ;;
+    cp)
+    kitty --session ~/.config/kitty/client-paybutton.session &
+    ;;
     pb)
     kitty --session ~/.config/kitty/paybutton.session &
+    ;;
+    pbr)
+    kitty --session ~/.config/kitty/paybutton-remote.session &
     ;;
     site)
     kitty --session ~/.config/kitty/site.session &
@@ -13,6 +22,7 @@ case "$ARG_PATH" in
         amb "$HOME"/codes/"$2"
     ;;
     *)
+        [[ ! -d "$ARG_PATH" ]] && [[ -d "$HOME"/codes/"$ARG_PATH" ]] && ARG_PATH="$HOME"/codes/"$ARG_PATH"
         sed 's|ARG_PATH|'"$ARG_PATH"'|g' ~/.config/kitty/template.session > ~/.config/kitty/temp.session
         kitty --session ~/.config/kitty/temp.session &
         wait

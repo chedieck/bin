@@ -1,0 +1,57 @@
+#!/bin/sh
+# Display current mpv playback info to dwmblocks
+# codeberg.org/mintezpresso
+
+# Need this line in ~/.config/mpv/mpc.conf to work:
+# input-ipc-server=/tmp/mpvsocket
+
+# Optional, but recommended: ttf-font-awesome (AUR btw) for symbols
+# Module would look much better with them
+
+# Uncomment REMAINING and METADATA and their respective printf command to display them
+
+
+case "$BUTTON" in
+    1) echo '{"command": ["cycle", "pause"]}' | socat - /tmp/mpvsocket &> /dev/null;;
+    2) echo '{"command": ["quit"]}' | socat - /tmp/mpvsocket &> /dev/null;;
+    3)
+        IDLE=$(echo '{ "command": ["get_property", "core-idle"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | sed s/\ $// )
+        if [ "$IDLE" != "true" ] && [ "$IDLE" != "false" ]; then
+            (
+            birdbg mp3 &> /dev/null
+            ) &
+            pkill -RTMIN+3 dwmblocks
+        fi
+esac
+
+
+mpvon=$(pgrep -x mpv)
+case $mpvon in
+    "" ) printf "🎧 —" ;;
+    * )
+POSITION=$(echo '{ "command": ["get_property_string", "time-pos"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | cut -d'.' -f 1)
+#REMAINING=$(echo '{ "command": ["get_property_string", "time-remaining"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | cut -d'.' -f 1)
+DURATION=$(echo '{ "command": ["get_property_string", "duration"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | cut -d'.' -f 1)
+FILENAME=$(echo '{ "command": ["get_property", "filename"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | sed s/\ $// | cut -c2- )
+IDLE=$(echo '{ "command": ["get_property", "core-idle"] }' | socat - /tmp/mpvsocket | jq .data | tr '"' ' ' | sed s/\ $// )
+#METADATA=$(echo "{ "command": ["get_property", "filtered-metadata"] }" | socat - /tmp/mpvsocket | jq ".data.Artist, .data.Album, .data.Title")
+
+case $IDLE in
+    "true" ) STATUS="" ;;
+    "false" ) STATUS="" ;;
+    *) STATUS="—" ;;
+esac
+
+printf "🎧 %s" "$STATUS"
+#case $METADATA in
+#    "null" ) printf "mpv" ;;
+#    *) printf $METADATA
+#esac
+#printf "$STATUS "
+#printf "%0d:%02d/" $((POSITION%3600/60)) $((POSITION%60))
+#printf '%0d:%02d' $((REMAINING%3600/60)) $((REMAINING%60))
+#printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+#printf " ]"
+
+esac
+
