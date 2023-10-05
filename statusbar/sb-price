@@ -9,6 +9,8 @@ LC_NUMERIC="en_US.UTF-8"
 
 [ -z "$3" ] && exit 1
 
+is_small=0
+
 # use $4 as currency, if not passed in use "usd" as default
 currency="${4:-usd}"
 interval="@14d"	# History contained in chart preceded by '@' (7d = 7 days)
@@ -49,4 +51,15 @@ case "$currency" in
 	btc) symb="₿" ;;
 esac
 
-printf "$3$symb%0.2f$after" "$(cat "$pricefile")"
+case "$1" in
+	xec) is_small=1; symb=¢ ;;
+esac
+
+if [ "$is_small" -eq 0 ]
+then
+	printf "$3$symb%0.2f" "$(cat "$pricefile")"
+else
+	sats=$(sed 's/e-.*//' "$pricefile")
+	value=$(echo "scale=10; ($sats * 10^(-5)) * 10^8" | bc | awk '{printf "%.0f\n", $1}')
+	printf "$3$symb%0.0f" "$value"
+fi
