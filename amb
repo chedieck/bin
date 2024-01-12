@@ -8,6 +8,9 @@ case "$ARG_PATH" in
     cp)
     kitty --session ~/.config/kitty/client-paybutton.session &
     ;;
+    st)
+    kitty --session ~/.config/kitty/staking.session &
+    ;;
     pb)
     kitty --session ~/.config/kitty/paybutton.session &
     ;;
