@@ -1,15 +1,15 @@
 #!/bin/bash
 case "$1" in
     mo|mainonly)
-        xrandr --output DP-2 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --off
+        xrandr --output DP-2 --primary --mode 2560x1440 --pos 900x0 --rotate normal --output HDMI-1 --off
         ;;
     so|secondonly)
-        xrandr --output HDMI-1 --primary --mode 1440x900 --pos 900x0 --rotate normal --output DP-2 --off
+        xrandr --output HDMI-1 --primary --mode 1440x900 --pos 900x0 --rotate left --output DP-2 --off # deve estar errado
         ;;
     inv|invert)
         xrandr --output DP-2 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 2560x330 --rotate normal #--output HDMI-2 --off
         ;;
     *)
-        xrandr --output DP-2 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x330 --rotate normal #--output HDMI-2 --off
+        xrandr --output DP-2 --primary --mode 2560x1440 --pos 900x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x0 --rotate left #--output HDMI-2 --off
         ;;
 esac
