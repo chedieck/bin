@@ -42,4 +42,5 @@ fi
 printf "🌐%s%s""$flag""$ip"
 }
 
-get_ipwhois
+#get_ipwhois
+get_ipinfoio
