@@ -1,11 +1,11 @@
 #!/bin/bash
 
 function reset_nm {
-    echo Reconnecting...
+    echo "$(date '+%Y-%m-%d %H:%M:%S')" Reconnecting...
     nmcli networking off
     sleep 1
     nmcli networking on
-    echo Networking on again...
+    echo "$(date '+%Y-%m-%d %H:%M:%S')" Networking on again...
 }
 
 function wait_until_on {
@@ -13,7 +13,7 @@ function wait_until_on {
     while true; do
         sleep 1
         ping -c 3 -i 0.2 -W 2 archlinux.org &> /dev/null && ret=1
-        [[ "$ret" -eq 1 ]] && echo Network connected. && return 1
+        [[ "$ret" -eq 1 ]] && echo "$(date '+%Y-%m-%d %H:%M:%S')" Network connected. && return 1
     done
 }
 
@@ -22,7 +22,7 @@ function wait_until_off {
     while true; do
         sleep 1
         ping -c 3 -i 0.2 -W 2 archlinux.org &> /dev/null || ret=1
-        [[ "$ret" -eq 1 ]] && echo Network disconnected. && return 1
+        [[ "$ret" -eq 1 ]] && echo "$(date '+%Y-%m-%d %H:%M:%S')" Network disconnected. && return 1
     done
 }
 

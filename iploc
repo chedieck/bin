@@ -1,0 +1,21 @@
+#!/bin/sh
+csv_path="$HOME/.local/share/tevos/asn-country-ipv4.csv"
+
+ip_to_bin () {
+    echo "$1" | awk -F '.' '{printf "%s", $1*256^3+$2*256^2+$3*256+$4}'
+}
+ip="$1"
+
+while read -r line; do
+    line_low=$(echo "$line" | awk -F ',' '{printf $1}')
+    line_top=$(echo "$line" | awk -F ',' '{printf $2}')
+    line_top_bin=$(ip_to_bin "$line_top")
+    line_low_bin=$(ip_to_bin "$line_low")
+    ip_bin=$(ip_to_bin "$ip")
+    if [ "$ip_bin" -gt "$line_low_bin" ] && [ "$ip_bin" -lt "$line_top_bin" ]; then
+        #echo "$line" | awk -F ',' '{printf $3}'
+        echo "$line"
+        echo "$line_low_bin" "$ip_bin" "$line_top_bin"
+        break;
+    fi
+done < "$csv_path"

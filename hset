@@ -8,4 +8,10 @@ case $1 in
     -d)
         echo -e 'disconnect 5C:C6:E9:1D:5C:98\n' | bluetoothctl; sleep 3; echo -e 'power off\n' | bluetoothctl
         ;;
+     -dj)
+         echo -e 'disconnect 2C:FD:B3:B0:C3:55\n' | bluetoothctl; sleep 3; echo -e 'power off\n' | bluetoothctl
+         ;;
+    -al)
+        rfkill unblock bluetooth && echo -e 'power on\n' | bluetoothctl; sleep 1; echo -e 'connect  68:F6:3B:82:3D:64\n' | bluetoothctl
+        ;;
 esac

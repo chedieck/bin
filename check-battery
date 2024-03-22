@@ -1,6 +1,6 @@
 #!/bin/bash
 
-THRESHOLD=8
+THRESHOLD=7
 
 capacity=$(cat /sys/class/power_supply/BAT0/capacity)
 charging=$(cat /sys/class/power_supply/AC/online)
