@@ -6,17 +6,9 @@
 
 case $BUTTON in
 	1) setsid -f "$TERMINAL" -e bmon ;;
-	3) notify-send "🌐 Network traffic module" "🡻 : Traffic received
-🡹 : Traffic transmitted
------------------------
-Speed (bytes/s)
-🌵: 0
-🐌: 0-1K
-🐪: 1K-1M
-🐎: 1M - 10M
-🦅: 10M - 100M 
-🚀: 100M - ..." ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+    3) notify-send "🌐 Network traffic module" "🔻: Traffic received
+        🔺: Traffic transmitted" ;;
+    6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 update() {
@@ -34,15 +26,4 @@ update() {
 rx=$(update /sys/class/net/[ew]*/statistics/rx_bytes)
 tx=$(update /sys/class/net/[ew]*/statistics/tx_bytes)
 
-get_emoji() {
-    if   [ "$1" = 0  ]; then emoji='🌵'
-    elif [ "$1" -lt 1024 ]; then emoji='🐌'
-    elif [ "$1" -lt 1048576 ]; then emoji='🐪'
-    elif [ "$1" -lt 10485760 ]; then emoji='🐎'
-    elif [ "$1" -lt 104857600 ]; then emoji='🦅'
-    else emoji='🚀'
-    fi
-    echo "$emoji"
-}
-
-printf "🡻%s🡹%s\\n" $(get_emoji $rx) $(get_emoji $tx)
+printf "🔻%4s 🔺%4s\\n" "$(numfmt --to=iec "$rx")" "$(numfmt --to=iec "$tx")"
