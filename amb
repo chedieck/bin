@@ -14,6 +14,9 @@ case "$ARG_PATH" in
     pb)
     kitty --session ~/.config/kitty/paybutton.session &
     ;;
+    hws)
+    kitty --session ~/.config/kitty/hodl-wars-server.session &
+    ;;
     pbr)
     kitty --session ~/.config/kitty/paybutton-remote.session &
     ;;
