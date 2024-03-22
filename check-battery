@@ -1,0 +1,7 @@
+#!/bin/bash
+
+THRESHOLD=8
+
+capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+charging=$(cat /sys/class/power_supply/AC/online)
+[[ "$capacity" -lt "$THRESHOLD" ]] && [[ "$charging" -eq 0 ]] && hey '🪫 Battery low' "$capacity"% || exit 0

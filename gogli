@@ -1,0 +1,8 @@
+#!/bin/bash
+old="$IFS"
+
+IFS='+'
+search_string="$*"
+
+firefox --new-tab https://www.google.com/search?q="$search_string"\&tbm=isch
+IFS="$old"

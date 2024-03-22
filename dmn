@@ -1,0 +1,4 @@
+#!/bin/bash
+
+command=$1
+echo Running "$command:" | dmenu -l 1 -c | xargs -r "$command"
