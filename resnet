@@ -1,0 +1,34 @@
+#!/bin/bash
+
+function reset_nm {
+    echo Reconnecting...
+    nmcli networking off
+    sleep 1
+    nmcli networking on
+    echo Networking on again...
+}
+
+function wait_until_on {
+    ret=0
+    while true; do
+        sleep 1
+        ping -c 3 -i 0.2 -W 2 archlinux.org &> /dev/null && ret=1
+        [[ "$ret" -eq 1 ]] && echo Network connected. && return 1
+    done
+}
+
+function wait_until_off {
+    ret=0
+    while true; do
+        sleep 1
+        ping -c 3 -i 0.2 -W 2 archlinux.org &> /dev/null || ret=1
+        [[ "$ret" -eq 1 ]] && echo Network disconnected. && return 1
+    done
+}
+
+while true; do
+    wait_until_off
+    reset_nm
+    wait_until_on
+done
+
