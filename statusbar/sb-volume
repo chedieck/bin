@@ -2,11 +2,26 @@
 
 # Prints the current volume or 🔇 if muted.
 
+tmpfile=/tmp/volume_bar.id
+INCREMENT_STEP=5
+volume_bar_id=$(cat "$tmpfile" 2> /dev/null)
+
+function notify_volume() {
+        new=$(pulsemixer  --get-volume | awk '{printf $1}')
+        if [ -z "$volume_bar_id" ]; then 
+            volume_bar_id=$(notify-send -p "🔊 Volume" "$new"%) 
+        else
+            notify-send -r "$volume_bar_id" "🔊 Volume" "$new"%
+        fi
+        echo "$volume_bar_id" > "$tmpfile"
+}
+
+
 case $BUTTON in
-	1) setsid -f "$TERMINAL" -e pulsemixer ;;
+	#1) setsid -f "$TERMINAL" -e pulsemixer ;;
 	2) pamixer -t ;;
-	4) pamixer --allow-boost -i 5 ;;
-	5) pamixer --allow-boost -d 5 ;;
+	4) pamixer --allow-boost -i 5 && notify_volume;;
+	5) pamixer --allow-boost -d 5 && notify_volume;;
 	3) notify-send "📢 Volume module" "\- Shows volume 🔊, 🔇 if muted.
 - Middle click to mute.
 - Scroll to change." ;;

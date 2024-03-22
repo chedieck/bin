@@ -1,7 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
 # Prints all batteries, their percentage remaining and an emoji corresponding
 # to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+tmpfile=/tmp/brightness_bar.id
+INCREMENT_STEP=5
+brightness_bar_id=$(cat "$tmpfile" 2> /dev/null)
+
+function notify_brightness() {
+        new=$(xbacklight -get | sed 's/\..*//')
+        if [ -z "$brightness_bar_id" ]; then 
+            brightness_bar_id=$(notify-send -p "🔆 Brightness" "$new"%) 
+        else
+            notify-send -r "$brightness_bar_id" "🔆 Brightness" "$new"%
+        fi
+        echo "$brightness_bar_id" > "$tmpfile"
+}
 
 case $BUTTON in
 	3) notify-send "🔋 Battery module" "🔋: discharging
@@ -11,8 +24,14 @@ case $BUTTON in
 ⚡: charged
 ❗: battery very low!
 - Scroll to change adjust xbacklight." ;;
-	4) xbacklight -inc 10 ;;
-	5) xbacklight -dec 10 ;;
+	4) xbacklight -inc "$INCREMENT_STEP"
+        notify_brightness
+    ;;
+    5)
+        current=$(xbacklight -get | sed 's/\..*//')
+        ([[ $current -ge 5 ]] && xbacklight -dec "$INCREMENT_STEP" ) ||  xbacklight -set 1
+        notify_brightness
+        ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
