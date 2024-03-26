@@ -59,5 +59,5 @@ esac
 if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-[ -f "$path" ] && nvr --remote +"$line" ./"$path" --servername /tmp/"$WINDOW_ID" && echo OPENED IN VSS: "$path":"$line"
+[ -f "$path" ] && nvr --remote +"$line" "$path" --servername /tmp/"$WINDOW_ID" && echo OPENED IN VSS: "$path":"$line"
 
