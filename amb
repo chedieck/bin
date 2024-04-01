@@ -8,14 +8,14 @@ case "$ARG_PATH" in
     cp)
     kitty --session ~/.config/kitty/client-paybutton.session &
     ;;
-    st)
+    stk)
     kitty --session ~/.config/kitty/staking.session &
     ;;
     pb)
     kitty --session ~/.config/kitty/paybutton.session &
     ;;
     hws)
-    kitty --session ~/.config/kitty/hodl-wars-server.session &
+    kitty --session ~/.config/kitty/hodlwars.session &
     ;;
     pbr)
     kitty --session ~/.config/kitty/paybutton-remote.session &

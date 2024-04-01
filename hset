@@ -2,6 +2,8 @@
 case $1 in
     -c)
         rfkill unblock bluetooth && echo -e 'power on\n' | bluetoothctl; sleep 1; echo -e 'connect 5C:C6:E9:1D:5C:98\n' | bluetoothctl;;
+    -cj)
+        rfkill unblock bluetooth && echo -e 'power on\n' | bluetoothctl; sleep 1; echo -e 'connect 2C:FD:B3:B0:C3:55\n' | bluetoothctl;;
     -r)
         rfkill unblock bluetooth && echo -e 'power on\n' | bluetoothctl && echo -e 'untrust 5C:C6:E9:1D:5C:98\n' | bluetoothctl && echo -e 'remove 5C:C6:E9:1D:5C:98\n' | bluetoothctl && echo -e 'scan on\n' | bluetoothctl; sleep 5; echo -e 'connect 5C:C6:E9:1D:5C:98\n' | bluetoothctl
         ;;
