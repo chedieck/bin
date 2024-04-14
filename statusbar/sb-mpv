@@ -11,7 +11,7 @@
 # Uncomment REMAINING and METADATA and their respective printf command to display them
 
 
-case "$BUTTON" in
+case "$BLOCK_BUTTON" in
     1) echo '{"command": ["cycle", "pause"]}' | socat - /tmp/mpvsocket &> /dev/null;;
     2) echo '{"command": ["quit"]}' | socat - /tmp/mpvsocket &> /dev/null;;
     3)

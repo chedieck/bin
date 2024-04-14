@@ -17,7 +17,7 @@ function notify_volume() {
 }
 
 
-case $BUTTON in
+case $BLOCK_BUTTON in
 	#1) setsid -f "$TERMINAL" -e pulsemixer ;;
 	2) pamixer -t ;;
 	4) pamixer --allow-boost -i 5 && notify_volume;;

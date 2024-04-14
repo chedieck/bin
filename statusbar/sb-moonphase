@@ -23,7 +23,7 @@ esac
 
 echo "${icon-?}"
 
-case $BUTTON in
+case $BLOCK_BUTTON in
 	3) notify-send "🌜 Moon phase module" "Displays current moon phase.
 - 🌑: New
 - 🌒: Waxing Crescent

@@ -16,7 +16,7 @@ function notify_brightness() {
         echo "$brightness_bar_id" > "$tmpfile"
 }
 
-case $BUTTON in
+case $BLOCK_BUTTON in
 	3) notify-send "🔋 Battery module" "🔋: discharging
 🛑: not charging
 ♻: stagnant charge

@@ -3,7 +3,7 @@
 home=$(df -h /home | awk ' /[0-9]/ {printf "%s/%s", $3, $2}')
 root=$(df -h / | awk ' /[0-9]/ {print $3 "/" $2}')
 ram=$(free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.0f/%2.0fG\n", ( $3 / 1000), ($2 / 1000))}')
-case $BUTTON in
+case $BLOCK_BUTTON in
 	1) notify-send "🧠 Memory hogs" "$(ps axch -o cmd:15,%mem --sort=-%mem | head)" ;;
 	2) setsid -f "$TERMINAL" -e htop ;;
 	3) notify-send "🧠💽 Memory & Disk" "\

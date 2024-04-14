@@ -2,7 +2,7 @@
 shopt -s expand_aliases
 source /home/ttv1/.bash_aliases
 
-case "$BUTTON" in
+case "$BLOCK_BUTTON" in
     1) if [ "$(birdbg tog)" == "Saved favorite." ];
     then
         notify-send -i wikiaves -u low "$(birdbg name)" "⭐ Saved favorite."
