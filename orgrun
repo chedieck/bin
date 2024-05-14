@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function startemacsclient {
+    emacsclient -c -e "(progn (find-file \"~/documents/orgfiles/refile.org\"))"
+}
+if [[ -z $(pgrep -l emacsclient) ]]; then
+    cd ~/documents/orgfiles && startemacsclient
+
+else
+    emacsclient ~/documents/orgfiles/refile.org
+fi
+
