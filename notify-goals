@@ -4,7 +4,11 @@
 GOALS_FILE="$HOME/documents/orgfiles/goals.org"
 
 # Extracting the Today goals section
-today_goals=$(sed -n '/\* Today goals/,/\*/p' "$GOALS_FILE" | sed '1d;$d')
+today_goals=$(sed -E -n "/\*\* $(date +%F)/,/^\*{2} /p" "$GOALS_FILE" | sed '1d;$d')
+if [[ -z $today_goals ]]; then
+    notify-send -u low "Sem tarefas para hoje."
+    exit
+fi
 
 # Initializing variables
 todos=""
@@ -14,10 +18,10 @@ dones=""
 while read -r line; do
     if [[ $line == "- [X]"* ]]; then
         goal=$(echo "$line" | sed 's/- \[X\] //')
-        dones+="- <span color='#77f'><i>$goal\n</i></span>"
+        dones+="✅ <span color='#77f'><i>$goal\n</i></span>"
     elif [[ $line == "- [ ]"* ]]; then
         goal=$(echo "$line" | sed 's/- \[ \] //')
-        todos+="- <span color='#0f0'><i>$goal\n</i></span>"
+        todos+="⬜ <span color='#0f0'><i>$goal\n</i></span>"
     fi
 done <<< "$today_goals"
 
