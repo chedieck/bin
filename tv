@@ -60,3 +60,4 @@ if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
 [ -f "$path" ] && nvr --remote +"$line" --servername /tmp/"$WINDOW_ID" -- "$path" && echo OPENED IN VSS: "$path":"$line"
+#[ -f "$path" ] && nvim --server /tmp/"$WINDOW_ID" --remote-send ":e ""$path""<CR>:""$line"":<CR>" && echo OPENED IN VSS: "$path":"$line"
