@@ -44,22 +44,15 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-case "$currency" in
-	usd) symb="$" ;;
-	gbp) symb="£" ;;
-	eur) symb="€" ;;
-	btc) symb="₿" ;;
-esac
-
 case "$1" in
-	xec) is_small=1; symb=¢ ;;
+	xec) is_small=1;;
 esac
 
 if [ "$is_small" -eq 0 ]
 then
-	printf "$3$symb%0.2f" "$(cat "$pricefile")"
+	printf "$3%0.2f" "$(cat "$pricefile")"
 else
 	sats=$(sed 's/e-.*//' "$pricefile")
 	value=$(echo "scale=10; ($sats * 10^(-5)) * 10^8" | bc | awk '{printf "%.0f\n", $1}')
-	printf "$3$symb%0.0f" "$value"
+	printf "$3%0.0f" "$value"
 fi
