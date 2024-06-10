@@ -5,8 +5,8 @@ case "$ARG_PATH" in
     borafechar|bf)
     kitty --session ~/.config/kitty/borafechar.session &
     ;;
-    cp)
-    kitty --session ~/.config/kitty/client-paybutton.session &
+    pc)
+    kitty --session ~/.config/kitty/paybutton-client.session &
     ;;
     stk)
     kitty --session ~/.config/kitty/staking.session &
@@ -14,7 +14,7 @@ case "$ARG_PATH" in
     pb)
     kitty --session ~/.config/kitty/paybutton.session &
     ;;
-    hws)
+    hw)
     kitty --session ~/.config/kitty/hodlwars.session &
     ;;
     pbr)
