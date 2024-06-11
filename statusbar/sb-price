@@ -50,9 +50,9 @@ esac
 
 if [ "$is_small" -eq 0 ]
 then
-	printf "$3%0.2f" "$(cat "$pricefile")"
+	printf "%s %0.2f" "$3" "$(cat "$pricefile")"
 else
 	sats=$(sed 's/e-.*//' "$pricefile")
 	value=$(echo "scale=10; ($sats * 10^(-5)) * 10^8" | bc | awk '{printf "%.0f\n", $1}')
-	printf "$3%0.0f" "$value"
+	printf "%s %0.0f" "$3" "$value"
 fi

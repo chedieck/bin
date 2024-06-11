@@ -18,29 +18,34 @@ get_ipwhois () {
         flag="XX"
     else
         ip=$(echo "$ip_data" | jq -r '.ip' | cut -c 1-4)
+        if [ "$ip" = null ]; then  ip="N/A"; fi
         #country_name=$(echo "$ip_data" | jq -r '.country')
         #flag=$(grep 'flag: '"$country_name" ~/.local/share/emojis | cut -c 1-10)
         flag=$(echo "$ip_data" | jq -r '.country_code')
+        if [ "$flag" = null ]; then  flag=""; fi
     fi
     #printf "\r🌐%s""$ip"
-    printf "🌐%s%s""$flag""$ip"
+    printf "🌐 %s%s""$flag""$ip"
 }
 
 get_ipinfoio () {
-#printf "wait.."
 ip_data=$(curl --connect-timeout 2 ipinfo.io)
 if [ -z "$ip_data" ]; then
 	ip="off."
-	flag="XX"
+	flag=""
 else
 	ip=$(echo "$ip_data" | jq -r '.ip' | cut -c 1-4)
+    if [ "$ip" = null ]; then  ip="N/A"; fi
+
+
 	#country_name=$(echo "$ip_data" | jq -r '.country')
 	#flag=$(grep 'flag: '"$country_name" ~/.local/share/emojis | cut -c 1-10)
 	flag=$(echo "$ip_data" | jq -r '.country')
+    if [ "$flag" = null ]; then  flag=""; fi
 fi
 #printf "\r🌐%s""$ip"
-printf "🌐%s%s""$flag""$ip"
+printf "🌐 %s%s""$flag""$ip"
 }
 
-#get_ipwhois
-get_ipinfoio
+get_ipwhois
+#get_ipinfoio

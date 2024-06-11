@@ -16,4 +16,4 @@ esac
 flag=""
 [ "$kb" = "br" ] && flag="br"
 [ "$kb" = "ru" ] && flag="ru"
-echo ⌨"$flag"
+echo ⌨ "$flag"
