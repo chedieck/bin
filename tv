@@ -24,7 +24,6 @@ case "$1" in
         # n_path_lines=$(git grep -rn -m 1 "$(echo "$2" | awk -F':' '{print $1}')" | wc -l)
         n_path_lines=$(git grep -rn -m 1 "$2" | wc -l)
         for ((i=1; i<= "$n_path_lines"; i++)); do
-            echo hmm "$i" "$2"
             tv ngge "$i" "$2"
         done
         shift
@@ -59,5 +58,5 @@ esac
 if [ -f "${path#a*/}" ] && [ ! -f "$path" ]; then
     path="${path#a*/}"
 fi
-[ -f "$path" ] && nvr --remote +"$line" --servername /tmp/"$WINDOW_ID" -- "$path" && echo OPENED IN VSS: "$path":"$line"
+[ -f "$path" ] && nvr +"$line" --servername /tmp/"$WINDOW_ID" -- "$path" && echo OPENED IN VSS: "$path":"$line"
 #[ -f "$path" ] && nvim --server /tmp/"$WINDOW_ID" --remote-send ":e ""$path""<CR>:""$line"":<CR>" && echo OPENED IN VSS: "$path":"$line"
