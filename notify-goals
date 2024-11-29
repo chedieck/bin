@@ -7,36 +7,43 @@ GOALS_FILE="$HOME/documents/orgfiles/goals.org"
 today_goals=$(sed -E -n "/\*\* $(date +%F)/,/^\*{2} /p" "$GOALS_FILE" | sed '1d;$d')
 if [[ -z $today_goals ]]; then
     notify-send -u low "Sem tarefas para hoje."
+    echo -e 'TODO:\n- a'
     exit
 fi
 
 # Initializing variables
 todos=""
 dones=""
+todos_formatted=""
+dones_formatted=""
 
 # Processing the goals
 while read -r line; do
     if [[ $line == "- [X]"* ]]; then
         goal=$(echo "$line" | sed 's/- \[X\] //')
-        dones+="✅ <span color='#77f'><i>$goal\n</i></span>"
+        dones+="- $goal\n"
+        dones_formatted+="✅ <span color='#77f'><i>$goal\n</i></span>"
     elif [[ $line == "- [ ]"* ]]; then
         goal=$(echo "$line" | sed 's/- \[ \] //')
-        todos+="⬜ <span color='#0f0'><i>$goal\n</i></span>"
+        todos+="- $goal\n"
+        todos_formatted+="⬜ <span color='#0f0'><i>$goal\n</i></span>"
     fi
 done <<< "$today_goals"
+
+echo -e 'TODO:\n'"$todos"
 
 # Building the notification message
 notification_message=""
 
 if [ -n "$todos" ]; then
-    notification_message+="\n$todos\n"
+    notification_message+="\n$todos_formatted\n"
 fi
 
 if [ -n "$dones" ]; then
-    notification_message+="\n$dones\n"
+    notification_message+="\n$dones_formatted\n"
 fi
 
-if [ -z "$todos" ] && [ -n "$dones" ]; then
+if [ -z "$todos" ] && [ -n "$dones_formatted" ]; then
     notification_message+="\n Concluído! 👌"
 fi
 
