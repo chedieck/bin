@@ -1,6 +1,6 @@
 #!/bin/bash
 layout=$(setxkbmap -query | grep layout | awk '{print $2}')
 #([ "$layout" == "br-ttv1" ] && setxkbmap ru ) || ( setxkbmap br-ttv1)
-([ "$layout" == "br-ttv1" ] && setxkbmap ru -option caps:escape) || ( setxkbmap br-ttv1 -option caps:escape)
+([ "$layout" == "br-ttv1" ] && setxkbmap ru -option caps:escape -option shift:both_capslock) || ( setxkbmap br-ttv1 -option caps:escape -option shift:both_capslock)
 sh -c "xset r rate 300 40"
 pkill -RTMIN+30 dwmblocks

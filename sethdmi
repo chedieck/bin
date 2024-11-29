@@ -7,7 +7,7 @@ case "$1" in
         "$HOME"/codes/bin/setbg
         #echo 'Xft.dpi:   192' | xrdb
         ;;
-    outroff)
+    outroff|-o|--oo)
         setmonitors mo
         "$HOME"/codes/bin/setbg
         #echo 'Xft.dpi:   96' | xrdb

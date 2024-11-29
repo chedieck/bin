@@ -1,5 +1,11 @@
 #!/bin/bash
 case "$1" in
+    toggle)
+        xrandr | awk '{print $2}' | grep -q '\*' && setmonitors off || sethdmi
+        ;;
+    off)
+        xrandr --output DP-2 --off --output HDMI-1 --off
+        ;;
     mo|mainonly)
         xrandr --output DP-2 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --off
         ;;
