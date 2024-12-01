@@ -3,11 +3,11 @@
 LC_NUMERIC="en_US.UTF-8"
 
 # Usage:
-#	price <url> <Name of currency> <icon> <Price to show in>
-#	price bat "Basic Attention Token" 🦁
+#	price <url> <Name of currency> <Price to show in>
+#	price bat "Basic Attention Token"
 # When the name of the currency is multi-word, put it in quotes.
 
-[ -z "$3" ] && exit 1
+[ -z "$2" ] && exit 1
 
 is_small=0
 
@@ -26,16 +26,15 @@ updateprice() { temp="$(mktemp)"
 
 [ -d "$dir" ] || mkdir -p "$dir"
 
-[ "$(stat -c %x "$pricefile" 2>/dev/null | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ] &&
-	updateprice "$1"
+updateprice "$1"
 
 case $BLOCK_BUTTON in
 	1) setsid "$TERMINAL" -e less -Srf "$chartfile" ;;
-	2) notify-send -u low "$3 Updating..." "Updating $2 price..."
-		updateprice "$1" && notify-send "$3 Update complete." "$2 price is now
+	2) notify-send -u low "Updating..." "Updating $2 price..."
+		updateprice "$1" && notify-send "Update complete." "$2 price is now
 \$$(cat "$pricefile")" ;;
 	3) uptime="$(date -d "$(stat -c %x "$pricefile")" '+%D at %T' | sed "s|$(date '+%D')|Today|")"
-		notify-send "$3 $2 module" "\- <b>Exact price: \$$(cat "$pricefile")</b>
+		notify-send "$2 module" "\- <b>Exact price: \$$(cat "$pricefile")</b>
 - Left click for chart of changes.
 - Middle click to update.
 - Shows 🔃 if updating prices.
@@ -50,9 +49,9 @@ esac
 
 if [ "$is_small" -eq 0 ]
 then
-	printf "%s %0.2f" "$3" "$(cat "$pricefile")"
+	printf "%0.2f" "$(cat "$pricefile")"
 else
 	sats=$(sed 's/e-.*//' "$pricefile")
 	value=$(echo "scale=10; ($sats * 10^(-5)) * 10^8" | bc | awk '{printf "%.0f\n", $1}')
-	printf "%s %0.0f" "$3" "$value"
+	printf "%0.0f" "$value"
 fi
