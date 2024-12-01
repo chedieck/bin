@@ -1,3 +1,0 @@
-pkill dwmblocks
-dwmblocks &
-exec dwm
